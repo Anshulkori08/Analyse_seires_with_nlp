@@ -58,7 +58,7 @@ def main():
                     )
 
     # Launch the Gradio interface
-    iface.launch(share=True)
+    iface.launch(share=True , server_port = 5000)
 
 if __name__ == '__main__':
     main()
