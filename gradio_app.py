@@ -1,8 +1,9 @@
 import gradio as gr
 from theme_classifier import ThemeClassifier
+from character_network import NameedEntityRecognizer, CharacterNetworkGenerator
 
 def get_themes(theme_list_str, subtitles_path, save_path):
-    try:
+    
         # Split the theme list string into a list of themes
         theme_list = theme_list_str.split(',')
 
@@ -33,29 +34,51 @@ def get_themes(theme_list_str, subtitles_path, save_path):
 
         return output_chart
 
-    except Exception as e:
-        # Handle any errors that occur during processing
-        return f"An error occurred: {str(e)}"
+def get_character_network(subtitles_path,ner_path):
+    ner = NameedEntityRecognizer()
+    ner_df = ner.get_ners(subtitles_path, ner_path)
+
+    character_network_generator = CharacterNetworkGenerator()
+    relationship_df = character_network_generator.generate_character_network(ner_df)
+    html = character_network_generator.draw_network_graph(relationship_df)
+
+    return html
 
 def main():
     # Create the Gradio interface
     with gr.Blocks() as iface:
+        # Theme Classification Section
         with gr.Row():
             with gr.Column():
-                gr.HTML("<h1>Theme Classification (Zero Shot Classification)</h1>")
-            with gr.Row():
-                with gr.Column():
-                    plot = gr.BarPlot()
-                with gr.Column():
-                    theme_list = gr.Textbox(label="Themes (comma-separated)")
-                    subtitles_path = gr.Textbox(label="Subtitles or Script Path")
-                    save_path = gr.Textbox(label="Save Path")
-                    get_themes_button = gr.Button("Get Themes")
-                    get_themes_button.click(
-                        get_themes,
-                        inputs=[theme_list, subtitles_path, save_path],
-                        outputs=[plot]
-                    )
+                gr.HTML("<h1>Theme Classification (Zero Shot Classifiers)</h1>")
+                with gr.Row():
+                    with gr.Column():
+                        plot = gr.BarPlot()
+                    with gr.Column():
+                        theme_list = gr.Textbox(label="Themes (comma-separated)")
+                        subtitles_path = gr.Textbox(label="Subtitles or Script Path")
+                        save_path = gr.Textbox(label="Save Path")
+                        get_themes_button = gr.Button("Get Themes")
+                        get_themes_button.click(
+                            get_themes,
+                            inputs=[theme_list, subtitles_path, save_path],
+                            outputs=[plot]
+                        )
+
+        # Character Network Section
+        
+        with gr.Row():
+            with gr.Column():
+                gr.HTML("<h1>Character Network (NERs and Graphs)</h1>")
+                with gr.Row():
+                    with gr.Column():
+                        network_html = gr.HTML()
+                    with gr.Column():
+                        subtitles_path = gr.Textbox(label="Subtutles or Script Path")
+                        ner_path = gr.Textbox(label="NERs save path")
+                        get_network_graph_button = gr.Button("Get Character Network")
+
+                        get_network_graph_button.click(get_character_network, inputs=[subtitles_path,ner_path], outputs=[network_html])
 
     # Launch the Gradio interface
     iface.launch(share=True)
