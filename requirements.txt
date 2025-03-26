@@ -1,5 +1,5 @@
-transformers==4.48.2
-huggingface_hub==0.28.1
-nltk==3.8.1
-gradio==5.15.0
-pyvis ==0.3.2
+transformers>=4.48.2
+huggingface_hub>=0.28.1
+nltk>=3.8.1
+gradio>=5.23.1
+pyvis >=0.3.2
