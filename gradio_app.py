@@ -81,7 +81,7 @@ def main():
                         get_network_graph_button.click(get_character_network, inputs=[subtitles_path,ner_path], outputs=[network_html])
 
     # Launch the Gradio interface
-    iface.launch(share=True)
+    iface.launch(share=True )
 
 if __name__ == '__main__':
     main()
