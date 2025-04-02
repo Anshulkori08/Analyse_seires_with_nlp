@@ -9,7 +9,7 @@ folder_path = pathlib.Path().parent.resolve()
 sys.path.append(os.path.join(folder_path, '../'))
 from utils import load_subtitles_dataset
 
-class NameedEntityRecognizer:
+class NamedEntityRecognizer:
     def __init__(self):
         self.nlp_model = self.load_model()
         pass
