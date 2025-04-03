@@ -15,7 +15,7 @@ from .cleaner import Cleaner
 from .training_utils import get_class_weights,compute_metrics
 from .custom_trainer import CustomTrainer
 
-class JutsuClassifier():
+class Jutsuclassifier():
     def __init__(self,
                  model_path,
                  data_path=None,
